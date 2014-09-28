@@ -1,4 +1,4 @@
-/*! angular-shims-placeholder - v0.2.0 - 2014-04-30
+/*! angular-shims-placeholder - v0.3.0 - 2014-04-30
 * https://github.com/jrief/angular-shims-placeholder
 * Copyright (c) 2014 Jacob Rief; Licensed MIT */
 (function (angular, document, undefined) {
