@@ -21,11 +21,6 @@
         if (is_pwd) {
           setupPasswordPlaceholder();
         }
-        $timeout(function(){
-          var orig_val = elem.val() || '';
-          setValue(orig_val);
-          ngModel.$setViewValue(orig_val);
-        });
         elem.bind('focus', function () {
           if (elem.hasClass(emptyClassName)) {
             elem.val('');
