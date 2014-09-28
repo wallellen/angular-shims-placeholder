@@ -3,7 +3,7 @@
 * Copyright (c) 2014 Jacob Rief; Licensed MIT */
 (function (angular, document, undefined) {
   'use strict';
-  angular.module('ng.shims.placeholder', []).directive('placeholder', function () {
+  angular.module('ng.shims.placeholder', []).directive('placeholder', ['$timeout', function ($timeout) {
     if (!angular.mock) {
       var test = document.createElement('input');
       if (test.placeholder !== void 0)
@@ -14,15 +14,18 @@
       require: 'ngModel',
       priority: 1,
       link: function (scope, elem, attrs, ngModel) {
-        var orig_val = elem.val() || '', is_pwd = attrs.type === 'password', text = attrs.placeholder, emptyClassName = 'empty', domElem = elem[0], clone;
+        var is_pwd = attrs.type === 'password', text = attrs.placeholder, emptyClassName = 'empty', domElem = elem[0], clone;
         if (!text) {
           return;
         }
         if (is_pwd) {
           setupPasswordPlaceholder();
         }
-        setValue(orig_val);
-        ngModel.$setViewValue(orig_val);
+        $timeout(function(){
+          var orig_val = elem.val() || '';
+          setValue(orig_val);
+          ngModel.$setViewValue(orig_val);
+        });
         elem.bind('focus', function () {
           if (elem.hasClass(emptyClassName)) {
             elem.val('');
@@ -83,5 +86,5 @@
         }
       }
     };
-  });
+  }]);
 }(window.angular, window.document));
