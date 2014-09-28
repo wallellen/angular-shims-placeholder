@@ -1,9 +1,9 @@
-/*! angular-shims-placeholder - v0.3.0 - 2014-04-30
+/*! angular-shims-placeholder - v0.3.1 - 2014-09-28
 * https://github.com/jrief/angular-shims-placeholder
 * Copyright (c) 2014 Jacob Rief; Licensed MIT */
 (function (angular, document, undefined) {
   'use strict';
-  angular.module('ng.shims.placeholder', []).directive('placeholder', ['$timeout', function ($timeout) {
+  angular.module('ng.shims.placeholder', []).directive('placeholder', function () {
     if (!angular.mock) {
       var test = document.createElement('input');
       if (test.placeholder !== void 0)
@@ -11,7 +11,7 @@
     }
     return {
       restrict: 'A',
-      require: 'ngModel',
+      require: '?ngModel',
       priority: 1,
       link: function (scope, elem, attrs, ngModel) {
         var is_pwd = attrs.type === 'password', text = attrs.placeholder, emptyClassName = 'empty', domElem = elem[0], clone;
@@ -32,12 +32,18 @@
           var val = elem.val();
           scope.$apply(function () {
             setValue(val);
-            ngModel.$setViewValue(val);
+            if (ngModel) {
+              ngModel.$setViewValue(val);
+            }
           });
         });
-        ngModel.$render = function () {
-          setValue(ngModel.$viewValue);
-        };
+        if (ngModel) {
+          ngModel.$render = function () {
+            setValue(ngModel.$viewValue);
+          };
+        } else {
+          setValue('');
+        }
         function setValue(val) {
           if (!val) {
             elem.addClass(emptyClassName);
@@ -81,5 +87,5 @@
         }
       }
     };
-  }]);
+  });
 }(window.angular, window.document));
